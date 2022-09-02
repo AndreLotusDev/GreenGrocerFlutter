@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
-import 'package:loja_virtual/src/pages/auth/sign_in_screen.dart';
+import 'package:loja_virtual/src/pages_routes/app_pages.dart';
 
 import '../common_widgets/app_name.dart';
 
@@ -17,9 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 1000), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (c) {
-        return const SignInScreen();
-      }));
+      Get.offNamed(PageRoutes.signInRoute);
     });
   }
 

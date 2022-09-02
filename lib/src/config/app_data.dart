@@ -86,7 +86,7 @@ UserModel user = UserModel(
     cpf: '021.144.866-48',
     email: 'andrsoares953@yahoo.com',
     name: 'André Soares Gomes',
-    senha: 'una senda de passo blancos');
+    password: 'una senda de passo blancos');
 
 List<OrderModel> orders = [
   // Pedido 01
