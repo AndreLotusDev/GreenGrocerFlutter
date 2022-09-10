@@ -107,7 +107,7 @@ class _HomeTabState extends State<HomeTab> {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   height: 40,
-                  child: !controller.isLoading
+                  child: !controller.isLoadingCategory
                       ? ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (_, index) {
@@ -145,7 +145,7 @@ class _HomeTabState extends State<HomeTab> {
             GetBuilder<HomeController>(
               builder: (controller) {
                 return Expanded(
-                  child: !controller.isLoading
+                  child: !controller.isLoadingCategory
                       ? GridView.builder(
                           padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
                           physics: const BouncingScrollPhysics(),
@@ -155,10 +155,10 @@ class _HomeTabState extends State<HomeTab> {
                                   mainAxisSpacing: 10,
                                   crossAxisSpacing: 10,
                                   childAspectRatio: 9 / 11.5),
-                          itemCount: app_data.items.length,
+                          itemCount: controller.allProducts.length,
                           itemBuilder: (_, index) {
                             return ItemTile(
-                              item: app_data.items[index],
+                              item: controller.allProducts[index],
                               cartAnimationMethod: itemSelectedCartAnimation,
                             );
                           })
