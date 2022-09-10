@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
+import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/product/product_screen.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
-
-import '../../../models/item_model.dart';
 
 class ItemTile extends StatefulWidget {
   ItemTile({Key? key, required this.item, required this.cartAnimationMethod})

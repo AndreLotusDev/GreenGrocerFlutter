@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/pages/cart/cart_tab.dart';
 import 'package:loja_virtual/src/pages/orders/orders_tab.dart';
 import 'package:loja_virtual/src/pages/profile/profile_tab.dart';
-import '../home/home_tab.dart';
+import '../home/view/home_tab.dart';
 
 class BaseScreen extends StatefulWidget {
   BaseScreen({Key? key}) : super(key: key);
