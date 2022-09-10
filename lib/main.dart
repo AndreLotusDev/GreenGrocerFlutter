@@ -4,6 +4,8 @@ import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
 import 'package:loja_virtual/src/pages_routes/app_pages.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Get.put(AuthController());
 
   runApp(const MyApp());

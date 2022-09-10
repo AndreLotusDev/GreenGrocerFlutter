@@ -10,7 +10,10 @@ class CustomTextField extends StatefulWidget {
   final String? initialValue;
   final bool readOnly;
   final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
   final TextEditingController? customTextFieldController;
+  final TextInputType? textInputType;
+  final GlobalKey<FormFieldState>? formFieldKey;
 
   const CustomTextField(
       {Key? key,
@@ -22,7 +25,10 @@ class CustomTextField extends StatefulWidget {
       this.initialValue,
       this.readOnly = false,
       this.validator,
-      this.customTextFieldController})
+      this.customTextFieldController,
+      this.textInputType,
+      this.onSaved,
+      this.formFieldKey})
       : super(key: key);
 
   @override
@@ -34,7 +40,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.isSecret) {
       isObscure = true;
     }
@@ -45,12 +50,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: TextFormField(
+          key: widget.formFieldKey,
+          keyboardType: widget.textInputType,
           controller: widget.customTextFieldController,
           initialValue: widget.initialValue,
           readOnly: widget.readOnly,
           validator: widget.validator,
           inputFormatters: widget.inputFormatters,
           obscureText: isObscure,
+          onSaved: widget.onSaved,
           decoration: InputDecoration(
             prefixIcon: Icon(widget.iconData),
             suffixIcon: widget.isSecret

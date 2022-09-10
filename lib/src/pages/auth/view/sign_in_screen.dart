@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
+import 'package:loja_virtual/src/pages/auth/repository/auth_errors.dart';
+import 'package:loja_virtual/src/pages/auth/view/forgot_password_dialog.dart';
 import 'package:loja_virtual/src/pages/common_widgets/app_name.dart';
 import 'package:loja_virtual/src/pages_routes/app_pages.dart';
+import 'package:loja_virtual/src/services/utils_services.dart';
+import 'package:loja_virtual/src/services/validators.dart';
 import '../../common_widgets/custom_text_field.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -14,6 +18,8 @@ class SignInScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final utilServices = UtilsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +80,7 @@ class SignInScreen extends StatelessWidget {
                       CustomTextField(
                         iconData: Icons.email,
                         label: 'Email',
-                        validator: (email) {
-                          if (email == null || email.isEmpty) {
-                            return 'Digite seu email!';
-                          }
-
-                          if (!email.isEmail) {
-                            return 'Digite um email válido';
-                          }
-                          return null;
-                        },
+                        validator: emailValidator,
                         customTextFieldController: emailController,
                       ),
 
@@ -92,17 +89,7 @@ class SignInScreen extends StatelessWidget {
                         label: 'Senha',
                         isSecret: true,
                         suffixIcon: Icons.visibility,
-                        validator: (password) {
-                          if (password == null || password.isEmpty) {
-                            return 'Digite sua senha';
-                          }
-
-                          if (password.length < 7) {
-                            return 'Digite uma senha com pelo menos 7 dígitos';
-                          }
-
-                          return null;
-                        },
+                        validator: passwordValidator,
                         customTextFieldController: passwordController,
                       ),
 
@@ -151,12 +138,29 @@ class SignInScreen extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Esqueceu a senha?',
-                                style: TextStyle(
-                                    color: CustomColors.customContrastColor),
-                              )),
+                            onPressed: () async {
+                              bool? result = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return ForgotPasswordDialog(
+                                    email: emailController.text,
+                                  );
+                                },
+                              );
+
+                              if (result ?? false) {
+                                utilServices.showToast(
+                                  message:
+                                      'Um link de recuperação foi enviado para o seu email',
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(
+                                  color: CustomColors.customContrastColor),
+                            ),
+                          ),
                         ),
                       ),
 

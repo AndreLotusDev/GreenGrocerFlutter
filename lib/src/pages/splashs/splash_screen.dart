@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
-import 'package:loja_virtual/src/pages_routes/app_pages.dart';
-
+import '../auth/controller/auth_controller.dart';
 import '../common_widgets/app_name.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,9 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      Get.offNamed(PageRoutes.signInRoute);
-    });
+    Get.find<AuthController>().validateToken();
   }
 
   @override
