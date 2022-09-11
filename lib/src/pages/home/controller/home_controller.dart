@@ -11,6 +11,12 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
+    debounce(
+      searchTitle,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
+
     getAllCategories();
   }
 
@@ -22,9 +28,18 @@ class HomeController extends GetxController {
   CategoryModel? currentCategory;
 
   List<ItemModel> get allProducts => currentCategory?.items ?? [];
+  bool get isLastPage {
+    if (currentCategory!.items.length > itemsPerPage) {
+      return true;
+    }
+
+    return currentCategory!.pagination * itemsPerPage > allProducts.length;
+  }
 
   bool isLoadingCategory = false;
   bool isLoadingProducts = true;
+
+  RxString searchTitle = ''.obs;
 
   void setLoadingCategory(bool value) {
     isLoadingCategory = value;
@@ -76,8 +91,8 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> getAllProducts() async {
-    setLoadingProduct(true);
+  Future<void> getAllProducts({bool shouldLoad = true}) async {
+    if (shouldLoad) setLoadingProduct(true);
 
     Map<String, dynamic> body = {
       'page': currentCategory!.pagination,
@@ -85,13 +100,21 @@ class HomeController extends GetxController {
       "itemPerPage": itemsPerPage
     };
 
+    if (searchTitle.value.isNotEmpty) {
+      body['title'] = searchTitle.value;
+
+      if (currentCategory!.id == '') {
+        body.remove('categoryId');
+      }
+    }
+
     var result = await homeRepository.getAllProducts(body);
 
-    setLoadingProduct(false);
+    if (shouldLoad) setLoadingProduct(false);
 
     result.when(
       success: (products) {
-        currentCategory!.items = products;
+        currentCategory!.items.addAll(products);
       },
       error: (message) {
         utilServices.showToast(
@@ -100,5 +123,45 @@ class HomeController extends GetxController {
         );
       },
     );
+  }
+
+  void filterByTitle() {
+    for (var category in allCategories) {
+      category.items.clear();
+
+      category.pagination = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      allCategories.removeAt(0);
+    } else {
+      CategoryModel? c = allCategories.firstWhereOrNull((cat) => cat.id == '');
+
+      if (c == null) {
+        final allProductsCategory = CategoryModel(
+          title: 'Todos',
+          id: '',
+          items: [],
+          pagination: 0,
+        );
+
+        allCategories.insert(0, allProductsCategory);
+      } else {
+        c.items.clear();
+        c.pagination = 0;
+      }
+    }
+
+    currentCategory = allCategories.first;
+
+    update();
+
+    getAllProducts();
+  }
+
+  void loadMoreProducts() {
+    currentCategory!.pagination++;
+
+    getAllProducts();
   }
 }

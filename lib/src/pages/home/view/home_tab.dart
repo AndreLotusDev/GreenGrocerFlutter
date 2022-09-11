@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:badges/badges.dart';
@@ -21,6 +23,8 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  final searchController = TextEditingController();
+
   GlobalKey<CartIconKey> globalKeyCartItens = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCartAnimation;
 
@@ -80,10 +84,15 @@ class _HomeTabState extends State<HomeTab> {
         child: Column(
           children: [
             //CAMPO DE PESQUISA
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextFormField(
-                decoration: InputDecoration(
+            GetBuilder<HomeController>(builder: (controller) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: TextFormField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    controller.searchTitle.value = value;
+                  },
+                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'Pesquise aqui...',
@@ -94,12 +103,29 @@ class _HomeTabState extends State<HomeTab> {
                       color: CustomColors.customContrastColor,
                       size: 21,
                     ),
+                    suffixIcon: controller.searchTitle.value.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              color: CustomColors.customContrastColor,
+                              size: 21,
+                            ),
+                            onPressed: () {
+                              searchController.clear();
+                              controller.searchTitle.value = '';
+                              Focus.of(context).unfocus();
+                            },
+                          ),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(60),
-                        borderSide: const BorderSide(
-                            width: 0, style: BorderStyle.none))),
-              ),
-            ),
+                      borderRadius: BorderRadius.circular(60),
+                      borderSide:
+                          const BorderSide(width: 0, style: BorderStyle.none),
+                    ),
+                  ),
+                ),
+              );
+            }),
 
             //LISTA DE OPCOES DE PRODUTOS
             GetBuilder<HomeController>(
@@ -146,22 +172,46 @@ class _HomeTabState extends State<HomeTab> {
               builder: (controller) {
                 return Expanded(
                   child: !controller.isLoadingCategory
-                      ? GridView.builder(
-                          padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
-                          physics: const BouncingScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 9 / 11.5),
-                          itemCount: controller.allProducts.length,
-                          itemBuilder: (_, index) {
-                            return ItemTile(
-                              item: controller.allProducts[index],
-                              cartAnimationMethod: itemSelectedCartAnimation,
-                            );
-                          })
+                      ? Visibility(
+                          visible: (controller.currentCategory?.items ?? [])
+                              .isNotEmpty,
+                          replacement: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 40,
+                                color: CustomColors.customSwatchColor,
+                              ),
+                              const Text('Não há itens para apresentar')
+                            ],
+                          ),
+                          child: GridView.builder(
+                              padding:
+                                  const EdgeInsets.fromLTRB(16, 30, 16, 16),
+                              physics: const BouncingScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 9 / 11.5),
+                              itemCount: controller.allProducts.length,
+                              itemBuilder: (_, index) {
+                                var isNotTheLastItem = (index + 1) ==
+                                    controller.allCategories.length;
+                                if (isNotTheLastItem &&
+                                    !controller.isLastPage) {
+                                  controller.loadMoreProducts();
+                                }
+
+                                return ItemTile(
+                                  item: controller.allProducts[index],
+                                  cartAnimationMethod:
+                                      itemSelectedCartAnimation,
+                                );
+                              }),
+                        )
                       : GridView.count(
                           padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
                           physics: const BouncingScrollPhysics(),

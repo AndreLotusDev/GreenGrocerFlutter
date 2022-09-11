@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
+import 'package:loja_virtual/src/pages/base/controller/navigation_controller.dart';
 import 'package:loja_virtual/src/pages/common_widgets/quantity_widget.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 class ProductScreen extends StatefulWidget {
-  ProductScreen({
-    Key? key,
-    required this.itemModel
-  }) : super(key: key);
+  const ProductScreen({Key? key, required this.itemModel}) : super(key: key);
 
   final ItemModel itemModel;
 
@@ -21,122 +20,110 @@ class _ProductScreenState extends State<ProductScreen> {
 
   int cartItemQuantity = 1;
 
+  final navigationController = Get.find<NavigationController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white.withAlpha(230),
-
       body: Stack(
         children: [
-
           //CONTEUDO
           Column(
             children: [
               Expanded(
                   child: Hero(
-                    tag: widget.itemModel.imgUrl,
-                    child: Image.asset(widget.itemModel.imgUrl)
-                  )
-              ),
-
+                      tag: widget.itemModel.imgUrl,
+                      child: Image.network(widget.itemModel.imgUrl))),
               Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(50),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade600,
-                          offset: const Offset(0, 3)
-                        )
-                      ]
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(50),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade600,
+                          offset: const Offset(0, 3))
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-
-                            //NOME DO PRODUTO
-                            Expanded(
-                              child: Text(
-                                widget.itemModel.itemName,
-
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-
-                                style: const TextStyle(
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.bold
-                              ),),
-                            ),
-
-                            QuantityWidget(
-                              suffixText: widget.itemModel.unit,
-                              value: cartItemQuantity,
-                              result: (quantity) {
-                                setState(() {
-                                  cartItemQuantity = quantity;
-                                });
-                              },
-                            )
-                          ],
-                        ),
-
-                        //PRECO
-                        Text(
-                          utilsServices.priceToCurrency(widget.itemModel.price),
-                          style: TextStyle(
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold,
-                            color: CustomColors.customSwatchColor
+                        //NOME DO PRODUTO
+                        Expanded(
+                          child: Text(
+                            widget.itemModel.itemName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 27, fontWeight: FontWeight.bold),
                           ),
                         ),
 
-                        //DESCRICAO
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Expanded(
-                            child: SingleChildScrollView(
-                              child: Text(
-                                widget.itemModel.description,
-                                style: const TextStyle(
-                                  height: 1.5
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //BOTAO
-                        SizedBox(
-                          height: 55,
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)
-                              )
-                            ),
-                            onPressed: () {
-
-                            },
-                            label: const Text(
-                              'Adicionar ao carrinho',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            icon: const Icon(Icons.shopping_cart_outlined)
-                          ),
+                        QuantityWidget(
+                          suffixText: widget.itemModel.unit,
+                          value: cartItemQuantity,
+                          result: (quantity) {
+                            setState(() {
+                              cartItemQuantity = quantity;
+                            });
+                          },
                         )
                       ],
                     ),
-                  )
-              )
+
+                    //PRECO
+                    Text(
+                      utilsServices.priceToCurrency(widget.itemModel.price),
+                      style: TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.customSwatchColor),
+                    ),
+
+                    //DESCRICAO
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Expanded(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            widget.itemModel.description,
+                            style: const TextStyle(height: 1.5),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //BOTAO
+                    SizedBox(
+                      height: 55,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+
+                          navigationController
+                              .navigatePageView(NavigationTabs.cart);
+                        },
+                        label: const Text(
+                          'Adicionar ao carrinho',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        icon: const Icon(Icons.shopping_cart_outlined),
+                      ),
+                    ),
+                  ],
+                ),
+              ))
             ],
           ),
 
@@ -146,8 +133,7 @@ class _ProductScreenState extends State<ProductScreen> {
             child: SafeArea(
               child: IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.arrow_back_ios)
-              ),
+                  icon: const Icon(Icons.arrow_back_ios)),
             ),
           )
         ],

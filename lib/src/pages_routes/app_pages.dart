@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:loja_virtual/src/pages/auth/view/sign_in_screen.dart';
 import 'package:loja_virtual/src/pages/auth/view/sign_up_screen.dart';
 import 'package:loja_virtual/src/pages/base/base_screen.dart';
+import 'package:loja_virtual/src/pages/base/binding/navigation_binding.dart';
 import 'package:loja_virtual/src/pages/home/binding/home_binding.dart';
 import 'package:loja_virtual/src/pages/splashs/splash_screen.dart';
 
@@ -21,8 +22,11 @@ abstract class AppPages {
     ),
     GetPage(
       name: PageRoutes.baseRoute,
-      page: () => BaseScreen(),
-      binding: HomeBinding(),
+      page: () => const BaseScreen(),
+      bindings: [
+        HomeBinding(),
+        NavigationBinding(),
+      ],
     ),
   ];
 }
