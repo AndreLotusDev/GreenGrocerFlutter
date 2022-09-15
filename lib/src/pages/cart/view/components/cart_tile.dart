@@ -5,12 +5,12 @@ import 'package:loja_virtual/src/pages/common_widgets/quantity_widget.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 class CartTile extends StatefulWidget {
-  const CartTile(
-      {Key? key, required this.cartItemModel, required this.removeItem})
-      : super(key: key);
+  const CartTile({
+    Key? key,
+    required this.cartItemModel,
+  }) : super(key: key);
 
   final CartItemModel cartItemModel;
-  final Function(CartItemModel cartItem) removeItem;
 
   @override
   State<CartTile> createState() => _CartTileState();
@@ -26,7 +26,7 @@ class _CartTileState extends State<CartTile> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
         //IMAGEM
-        leading: Image.asset(
+        leading: Image.network(
           widget.cartItemModel.item.imgUrl,
           height: 60,
           width: 60,
@@ -50,18 +50,7 @@ class _CartTileState extends State<CartTile> {
         trailing: QuantityWidget(
           suffixText: widget.cartItemModel.item.unit,
           value: widget.cartItemModel.quantity,
-          result: (quantity) {
-            setState(() {
-              widget.cartItemModel.quantity = quantity;
-
-              utilsServices.showToast(
-                  message: 'Removido com sucesso do carrinho');
-
-              if (quantity == 0) {
-                widget.removeItem(widget.cartItemModel);
-              }
-            });
-          },
+          result: (quantity) {},
           isRemovable: true,
         ),
       ),

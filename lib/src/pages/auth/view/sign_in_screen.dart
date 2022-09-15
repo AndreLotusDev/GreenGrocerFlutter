@@ -203,7 +203,7 @@ class SignInScreen extends StatelessWidget {
                                     width: 2,
                                     color: Colors.green.withAlpha(90))),
                             onPressed: () {
-                              Get.toNamed(PageRoutes.signUpRoute);
+                              Get.toNamed(PagesRoutes.signUpRoute);
                             },
                             child: const Text('Criar Conta',
                                 style: TextStyle(fontSize: 18)),

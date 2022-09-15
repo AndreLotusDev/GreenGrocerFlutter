@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/product/product_screen.dart';
+import 'package:loja_virtual/src/pages_routes/app_pages.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 class ItemTile extends StatefulWidget {
@@ -41,9 +43,7 @@ class _ItemTileState extends State<ItemTile> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (c) {
-              return ProductScreen(itemModel: widget.item);
-            }));
+            Get.toNamed(PagesRoutes.productRoute, arguments: widget.item);
           },
           child: Card(
             elevation: 3,
@@ -81,9 +81,10 @@ class _ItemTileState extends State<ItemTile> {
                       Text(
                         '/${widget.item.unit}',
                         style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12),
+                          color: Colors.grey.shade500,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       )
                     ],
                   )

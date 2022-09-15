@@ -19,7 +19,7 @@ class AuthController extends GetxController {
     String? token = await _utilsServices.getLocalData(key: StorageKeys.token);
 
     if (token == null) {
-      Get.offAllNamed(PageRoutes.signInRoute);
+      Get.offAllNamed(PagesRoutes.signInRoute);
       return;
     }
 
@@ -42,13 +42,13 @@ class AuthController extends GetxController {
 
     await _utilsServices.removeLocalData(key: StorageKeys.token);
 
-    Get.offAllNamed(PageRoutes.signInRoute);
+    Get.offAllNamed(PagesRoutes.signInRoute);
   }
 
   void saveTokenAndProceedToBase() {
     _utilsServices.saveLocalData(key: StorageKeys.token, data: user.token!);
 
-    Get.offAllNamed(PageRoutes.baseRoute);
+    Get.offAllNamed(PagesRoutes.baseRoute);
   }
 
   Future<void> signUp() async {

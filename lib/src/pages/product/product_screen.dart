@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/base/controller/navigation_controller.dart';
+import 'package:loja_virtual/src/pages/cart/controller/cart_controller.dart';
 import 'package:loja_virtual/src/pages/common_widgets/quantity_widget.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key, required this.itemModel}) : super(key: key);
+  ProductScreen({Key? key}) : super(key: key);
 
-  final ItemModel itemModel;
+  final ItemModel itemModel = Get.arguments;
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -21,6 +22,7 @@ class _ProductScreenState extends State<ProductScreen> {
   int cartItemQuantity = 1;
 
   final navigationController = Get.find<NavigationController>();
+  final cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +111,11 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                         onPressed: () {
                           Get.back();
+
+                          cartController.addItemToCart(
+                            item: widget.itemModel,
+                            quantity: cartItemQuantity,
+                          );
 
                           navigationController
                               .navigatePageView(NavigationTabs.cart);
