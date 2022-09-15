@@ -128,7 +128,8 @@ class _CartTabState extends State<CartTab> {
                             borderRadius: BorderRadius.circular(18),
                           ),
                         ),
-                        onPressed: controller.isCheckoutLoading
+                        onPressed: controller.isCheckoutLoading ||
+                                controller.cartItems.isEmpty
                             ? null
                             : () async {
                                 bool? result = await showOrderConfirmation();
@@ -139,10 +140,17 @@ class _CartTabState extends State<CartTab> {
                               },
                         child: controller.isCheckoutLoading
                             ? const CircularProgressIndicator()
-                            : const Text(
-                                'Concluir pedido',
-                                style: TextStyle(fontSize: 18),
-                              ),
+                            : controller.cartItems.isEmpty
+                                ? const Text(
+                                    'Carrinho vazio, adicione um pedido!',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Concluir pedido',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
                       );
                     },
                   ),
