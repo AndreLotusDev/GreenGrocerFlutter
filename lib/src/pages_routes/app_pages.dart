@@ -5,6 +5,7 @@ import 'package:loja_virtual/src/pages/base/base_screen.dart';
 import 'package:loja_virtual/src/pages/base/binding/navigation_binding.dart';
 import 'package:loja_virtual/src/pages/cart/binding/cart_binding.dart';
 import 'package:loja_virtual/src/pages/home/binding/home_binding.dart';
+import 'package:loja_virtual/src/pages/orders/binding/order_binding.dart';
 import 'package:loja_virtual/src/pages/product/product_screen.dart';
 import 'package:loja_virtual/src/pages/splashs/splash_screen.dart';
 
@@ -33,6 +34,7 @@ abstract class AppPages {
         HomeBinding(),
         NavigationBinding(),
         CartBinding(),
+        OrdersBinding()
       ],
     ),
   ];

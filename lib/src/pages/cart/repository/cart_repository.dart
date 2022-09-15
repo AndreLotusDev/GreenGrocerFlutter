@@ -1,5 +1,6 @@
 import 'package:loja_virtual/src/constants/endpoints.dart';
 import 'package:loja_virtual/src/models/cart_item_model.dart';
+import 'package:loja_virtual/src/models/order_model.dart';
 import 'package:loja_virtual/src/pages/cart/cart_result/cart_result.dart';
 import 'package:loja_virtual/src/services/http_manager.dart';
 
@@ -31,6 +32,28 @@ class CartRepository {
     } else {
       return CartResult.error(
           'Houve um erro ao recuperar os itens do carrinho');
+    }
+  }
+
+  Future<CartResult<OrderModel>> cartCheckout(
+      {required String token, required double total}) async {
+    var result = await _httpManager.restRequest(
+      url: Endpoints.checkout,
+      method: HttpMethods.post,
+      body: {
+        'total': total,
+      },
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+    );
+
+    if (result['result'] != null) {
+      var order = OrderModel.fromJson(result['result']);
+
+      return CartResult.success(order);
+    } else {
+      return CartResult.error('Houve um erro ao finalizar o pedido!');
     }
   }
 

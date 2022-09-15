@@ -1,16 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loja_virtual/src/config/app_data.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
 import 'package:loja_virtual/src/pages/cart/repository/cart_repository.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 import '../../../models/cart_item_model.dart';
+import '../../common_widgets/payment_dialog.dart';
 
 class CartController extends GetxController {
   final _cartRepository = CartRepository();
   final _authController = Get.find<AuthController>();
 
   final _utilsServices = UtilsServices();
+
+  bool isCheckoutLoading = false;
+  void setCheckoutLoading(bool actualStatus) {
+    isCheckoutLoading = actualStatus;
+    update();
+  }
 
   List<CartItemModel> cartItems = [];
 
@@ -53,6 +62,39 @@ class CartController extends GetxController {
     }
 
     return response;
+  }
+
+  Future checkoutCart() async {
+    setCheckoutLoading(true);
+
+    var cartResult = await _cartRepository.cartCheckout(
+      token: _authController.user.token!,
+      total: cartTotalPrice(),
+    );
+
+    setCheckoutLoading(false);
+
+    cartResult.when(
+      success: (cartModel) {
+        cartItems.clear();
+        update();
+
+        showDialog(
+          context: Get.context!,
+          builder: (_) {
+            return PaymentDialog(
+              order: cartModel,
+            );
+          },
+        );
+      },
+      error: (messageError) {
+        _utilsServices.showToast(
+          message: messageError,
+          isError: true,
+        );
+      },
+    );
   }
 
   double cartTotalPrice() {

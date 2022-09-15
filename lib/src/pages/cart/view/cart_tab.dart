@@ -17,6 +17,7 @@ class CartTab extends StatefulWidget {
 
 class _CartTabState extends State<CartTab> {
   final UtilsServices utilsServices = UtilsServices();
+  final cartController = Get.find<CartController>();
 
   Future<bool?> showOrderConfirmation() {
     return showDialog(
@@ -34,13 +35,16 @@ class _CartTabState extends State<CartTab> {
                   },
                   child: const Text("Não")),
               ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text("Sim"))
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text("Sim"),
+              )
             ],
           );
         });
@@ -117,33 +121,33 @@ class _CartTabState extends State<CartTab> {
                 ),
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
+                  child: GetBuilder<CartController>(
+                    builder: (controller) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
                           primary: CustomColors.customSwatchColor,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18))),
-                      onPressed: () async {
-                        bool? result = await showOrderConfirmation();
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        onPressed: controller.isCheckoutLoading
+                            ? null
+                            : () async {
+                                bool? result = await showOrderConfirmation();
 
-                        if (result ?? false) {
-                          utilsServices.showToast(message: 'Pedido confirmado');
-
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return PaymentDialog(
-                                order: APP_DATA.orders.first,
-                              );
-                            },
-                          );
-                        } else {
-                          utilsServices.showToast(message: 'Pedido cancelado');
-                        }
-                      },
-                      child: const Text(
-                        'Concluir pedido',
-                        style: TextStyle(fontSize: 18),
-                      )),
+                                if (result ?? false) {
+                                  controller.checkoutCart();
+                                }
+                              },
+                        child: controller.isCheckoutLoading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                'Concluir pedido',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),

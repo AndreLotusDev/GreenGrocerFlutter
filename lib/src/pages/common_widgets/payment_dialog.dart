@@ -1,7 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/models/order_model.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class PaymentDialog extends StatelessWidget {
   PaymentDialog({Key? key, required this.order}) : super(key: key);
@@ -64,10 +64,10 @@ class _PixCode extends StatelessWidget {
           ),
 
           //QR CODE
-          QrImage(
-            data: order.hashCode.toString(),
-            version: QrVersions.auto,
-            size: 200.0,
+          Image.memory(
+            utilsServices.decodeQrCodeImage(order.qrCodeImage),
+            height: 200,
+            width: 200,
           ),
 
           //VENCIMENTO
@@ -81,7 +81,10 @@ class _PixCode extends StatelessWidget {
           //TOTAL
           Text(
             'Total: ${utilsServices.priceToCurrency(order.total)}',
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           //COPIA COLA
@@ -95,11 +98,14 @@ class _PixCode extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              FlutterClipboard.copy(order.copyAndPaste);
+              utilsServices.showToast(message: 'Código copiado!');
+            },
             icon: const Icon(Icons.copy),
             label: const Text(
               'Copiar código pix',
-              style: const TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: 13),
             ),
           )
         ],
