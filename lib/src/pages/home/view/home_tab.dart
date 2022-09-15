@@ -6,9 +6,11 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
+import 'package:loja_virtual/src/pages/base/controller/navigation_controller.dart';
 import 'package:loja_virtual/src/pages/common_widgets/custom_shimmer.dart';
 import 'package:loja_virtual/src/pages/home/view/component/item_tile.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
+import '../../cart/controller/cart_controller.dart';
 import '../../common_widgets/app_name.dart';
 import 'package:loja_virtual/src/config/app_data.dart' as app_data;
 
@@ -24,6 +26,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final searchController = TextEditingController();
+  final navigationController = Get.find<NavigationController>();
 
   GlobalKey<CartIconKey> globalKeyCartItens = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCartAnimation;
@@ -52,22 +55,28 @@ class _HomeTabState extends State<HomeTab> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 15),
-            child: GestureDetector(
-              onTap: () {},
-              child: Badge(
-                badgeColor: CustomColors.customContrastColor,
-                badgeContent: const Text(
-                  '2',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                child: AddToCartIcon(
-                  key: globalKeyCartItens,
-                  icon: Icon(
-                    Icons.shopping_cart,
-                    color: CustomColors.customSwatchColor,
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return GestureDetector(
+                  onTap: () {
+                    navigationController.navigatePageView(NavigationTabs.cart);
+                  },
+                  child: Badge(
+                    badgeColor: CustomColors.customContrastColor,
+                    badgeContent: Text(
+                      controller.cartItems.length.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    child: AddToCartIcon(
+                      key: globalKeyCartItens,
+                      icon: Icon(
+                        Icons.shopping_cart,
+                        color: CustomColors.customSwatchColor,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           )
         ],

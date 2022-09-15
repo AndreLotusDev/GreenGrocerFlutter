@@ -42,7 +42,7 @@ class CartRepository {
     var result = await _httpManager.restRequest(
       url: Endpoints.modifyItemsQuantity,
       method: HttpMethods.post,
-      body: {'cartItemsId': cartItemId, 'quantity': quantity},
+      body: {'cartItemId': cartItemId, 'quantity': quantity},
       headers: {
         'X-Parse-Session-Token': token,
       },
