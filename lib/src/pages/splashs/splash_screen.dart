@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import '../auth/controller/auth_controller.dart';
 import '../common_widgets/app_name.dart';

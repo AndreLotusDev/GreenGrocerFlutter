@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
-import 'package:loja_virtual/src/services/utils_services.dart';
 import 'package:loja_virtual/src/services/validators.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../common_widgets/custom_text_field.dart';
@@ -18,8 +17,6 @@ class SignUpScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final authController = Get.find<AuthController>();
-
-  final _utilServices = UtilsServices();
 
   @override
   Widget build(BuildContext context) {

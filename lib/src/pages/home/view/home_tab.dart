@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:badges/badges.dart';
@@ -12,7 +10,6 @@ import 'package:loja_virtual/src/pages/home/view/component/item_tile.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../../common_widgets/app_name.dart';
-import 'package:loja_virtual/src/config/app_data.dart' as app_data;
 
 import '../controller/home_controller.dart';
 import 'component/category_tile.dart';
@@ -51,7 +48,7 @@ class _HomeTabState extends State<HomeTab> {
         backgroundColor: Colors.white.withAlpha(190),
         elevation: 0,
         centerTitle: true,
-        title: AppName(),
+        title: const AppName(),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 15),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loja_virtual/src/config/app_data.dart';
 import 'package:loja_virtual/src/models/cart_item_model.dart';
 import 'package:loja_virtual/src/models/order_model.dart';
 import 'package:loja_virtual/src/pages/common_widgets/payment_dialog.dart';
@@ -77,7 +76,7 @@ class _OrderTileState extends State<OrderTile> {
                               ),
                             ),
 
-                            //DIVISAO
+                            //DIVISÃO
                             VerticalDivider(
                               color: Colors.grey.shade300,
                               thickness: 2,
@@ -113,7 +112,7 @@ class _OrderTileState extends State<OrderTile> {
                         ),
                       ),
 
-                      //BOTAO DE EFETUAR PAGAMENTO
+                      //BOTÃO DE EFETUAR PAGAMENTO
                       Visibility(
                         visible:
                             widget.orderModel.status == 'pending_payment' &&

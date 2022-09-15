@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/pages/cart/controller/cart_controller.dart';
-import 'package:loja_virtual/src/pages/common_widgets/payment_dialog.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
-import 'package:loja_virtual/src/config/app_data.dart' as APP_DATA;
 
 import 'components/cart_tile.dart';
 

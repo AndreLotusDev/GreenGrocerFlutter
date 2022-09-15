@@ -33,7 +33,9 @@ class AllOrdersController extends GetxController {
 
     result.when(
       success: (resultOrders) {
-        allOrders.addAll(resultOrders);
+        allOrders.clear();
+        allOrders.addAll(resultOrders
+          ..sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!)));
         update();
       },
       error: (message) {

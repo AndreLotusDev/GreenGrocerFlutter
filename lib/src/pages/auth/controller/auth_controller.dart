@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/constants/storage_keys.dart';
 import 'package:loja_virtual/src/models/user_model.dart';
@@ -98,5 +97,36 @@ class AuthController extends GetxController {
 
   Future<void> resetPassword(String email) async {
     await _authRepository.resetPassword(email);
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    isLoading.value = true;
+
+    var response = await _authRepository.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      email: user.email!,
+      token: user.token!,
+    );
+
+    isLoading.value = false;
+
+    if (response) {
+      _utilsServices.showToast(
+        message: 'A senha foi alterada com sucesso',
+      );
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      signOut();
+    } else {
+      _utilsServices.showToast(
+        message: 'A senha atual está incorreta!',
+        isError: true,
+      );
+    }
   }
 }

@@ -43,6 +43,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (widget.isSecret) {
       isObscure = true;
     }
+
+    super.initState();
   }
 
   @override

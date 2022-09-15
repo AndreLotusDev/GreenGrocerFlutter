@@ -21,9 +21,12 @@ class AuthRepository {
 
   Future<AuthResult> validateToken(String token) async {
     var result = await _httpManager.restRequest(
-        url: Endpoints.validateToken,
-        method: HttpMethods.post,
-        headers: {'X-Parse-Session-Token': token});
+      url: Endpoints.validateToken,
+      method: HttpMethods.post,
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+    );
 
     if (result['result'] != null) {
       final user = UserModel.fromJson(result['result']);
@@ -37,9 +40,13 @@ class AuthRepository {
   Future<AuthResult> signIn(
       {required String email, required String password}) async {
     final result = await _httpManager.restRequest(
-        url: Endpoints.signIn,
-        method: HttpMethods.post,
-        body: {"email": email, "password": password});
+      url: Endpoints.signIn,
+      method: HttpMethods.post,
+      body: {
+        "email": email,
+        "password": password,
+      },
+    );
 
     //Passou durante a autenticação
     return handleUserOrError(result);
@@ -61,5 +68,31 @@ class AuthRepository {
       method: HttpMethods.post,
       body: {'email': email},
     );
+  }
+
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String email,
+    required String token,
+  }) async {
+    var result = await _httpManager.restRequest(
+      url: Endpoints.changePassword,
+      method: HttpMethods.post,
+      body: {
+        'email': email,
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      },
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+    );
+
+    if (result['error'] == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/cart/controller/cart_controller.dart';
-import 'package:loja_virtual/src/pages/product/product_screen.dart';
 import 'package:loja_virtual/src/pages_routes/app_pages.dart';
 import 'package:loja_virtual/src/services/utils_services.dart';
 
 class ItemTile extends StatefulWidget {
-  ItemTile({Key? key, required this.item, required this.cartAnimationMethod})
+  const ItemTile(
+      {Key? key, required this.item, required this.cartAnimationMethod})
       : super(key: key);
 
-  ItemModel item;
+  final ItemModel item;
 
   final void Function(GlobalKey) cartAnimationMethod;
 

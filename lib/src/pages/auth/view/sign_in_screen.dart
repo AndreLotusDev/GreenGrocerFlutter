@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loja_virtual/src/config/custom_colors.dart';
 import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
-import 'package:loja_virtual/src/pages/auth/repository/auth_errors.dart';
 import 'package:loja_virtual/src/pages/auth/view/forgot_password_dialog.dart';
 import 'package:loja_virtual/src/pages/common_widgets/app_name.dart';
 import 'package:loja_virtual/src/pages_routes/app_pages.dart';

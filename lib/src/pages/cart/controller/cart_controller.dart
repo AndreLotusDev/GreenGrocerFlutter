@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loja_virtual/src/config/app_data.dart';
 import 'package:loja_virtual/src/models/item_model.dart';
 import 'package:loja_virtual/src/pages/auth/controller/auth_controller.dart';
 import 'package:loja_virtual/src/pages/cart/repository/cart_repository.dart';
